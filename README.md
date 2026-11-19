@@ -1,5 +1,3 @@
-# Clean-Runner
-Não pegue coins
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -178,5 +176,908 @@ Não pegue coins
     position: absolute;
     top: 50px;
   }
-  .char-
-... 
+  .char-arm.l { left: 8px; transform: rotate(15deg); }
+  .char-arm.r { right: 8px; transform: rotate(-15deg); }
+
+  .play-btn {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #00e676, #00c853);
+    border: 8px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 28px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,230,118,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+  .play-btn:active { transform: scale(0.92); }
+
+  .bottom-menu {
+    display: flex;
+    justify-content: space-around;
+    padding: 16px 10px 28px;
+    background: #16162a;
+    border-top: 1px solid #2a2a40;
+  }
+  .menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .menu-item .icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: #2a2a40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+  }
+  .menu-item.active .icon { background: var(--accent); color: #fff; }
+
+  /* ===== GAME ===== */
+  #gameScreen { background: #111; }
+  #gameCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .hud {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    z-index: 10;
+  }
+  .timer {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 22px;
+    color: var(--gold);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+  .speed-label {
+    font-size: 14px;
+    background: rgba(0,0,0,0.5);
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  /* ===== RESULT ===== */
+  #resultScreen {
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    gap: 16px;
+    text-align: center;
+    background: rgba(0,0,0,0.85);
+  }
+  .result-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 18px;
+    color: var(--accent);
+  }
+  .result-time {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--gold);
+  }
+  .result-record {
+    font-size: 16px;
+    color: #aaa;
+  }
+  .new-record {
+    background: linear-gradient(90deg, #ffd700, #ffaa00);
+    color: #000;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 14px;
+    animation: pulse 0.8s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  /* ===== MODALS ===== */
+  .modal {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 20px;
+  }
+  .modal.active { display: flex; }
+  .modal-box {
+    background: #1e1e30;
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 360px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .close-btn {
+    margin-top: 16px;
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    width: 100%;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .record-item, .rank-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #2a2a40;
+    font-size: 15px;
+  }
+  .rank-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .rank-tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #2a2a40;
+    color: #aaa;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .rank-tab.active { background: var(--accent); color: #fff; }
+  .skin-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: #2a2a40;
+    border-radius: 14px;
+    margin-bottom: 10px;
+  }
+  .skin-card.locked { opacity: 0.5; }
+  .skin-preview {
+    width: 50px; height: 60px;
+    background: #4fc3f7;
+    border-radius: 10px;
+  }
+  .code-input {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .code-input input { flex: 1; }
+  .code-input button {
+    padding: 0 18px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 14px 0;
+  }
+  .toggle {
+    width: 52px; height: 28px;
+    background: #333;
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+  }
+  .toggle.on { background: var(--green); }
+  .toggle::after {
+    content: '';
+    width: 22px; height: 22px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px; left: 3px;
+    transition: left 0.2s;
+  }
+  .toggle.on::after { left: 27px; }
+  input[type=range] {
+    width: 120px;
+    accent-color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen" class="screen active">
+  <div class="logo">EVITE AS<br>MOEDAS<span>não pegue nenhuma!</span></div>
+  <input type="text" id="loginName" placeholder="Seu nome" maxlength="16">
+  <input type="password" id="loginPass" placeholder="Senha" maxlength="20">
+  <select id="loginCountry">
+    <option value="BR">Brasil</option>
+    <option value="PT">Portugal</option>
+    <option value="US">Estados Unidos</option>
+    <option value="AR">Argentina</option>
+    <option value="MX">México</option>
+    <option value="ES">Espanha</option>
+    <option value="OTHER">Outro</option>
+  </select>
+  <button class="btn btn-primary" onclick="doLogin()">Entrar</button>
+</div>
+
+<!-- MENU -->
+<div id="menuScreen" class="screen">
+  <div class="top-bar">
+    <button class="icon-btn" onclick="openModal('recordsModal')" title="Recordes">🏆</button>
+    <div class="player-name" id="displayName">Jogador</div>
+    <button class="icon-btn" onclick="openModal('settingsModal')" title="Configurações">⚙️</button>
+  </div>
+
+  <div class="character-area">
+    <div class="character" id="menuChar">
+      <div class="char-head">
+        <div class="char-eye l"></div>
+        <div class="char-eye r"></div>
+      </div>
+      <div class="char-body"></div>
+      <div class="char-arm l"></div>
+      <div class="char-arm r"></div>
+      <div class="char-leg l"></div>
+      <div class="char-leg r"></div>
+    </div>
+    <button class="play-btn" onclick="startGame()">JOGAR</button>
+  </div>
+
+  <div class="bottom-menu">
+    <button class="menu-item" onclick="openModal('skinsModal')">
+      <div class="icon">👕</div>
+      Skins
+    </button>
+    <button class="menu-item" onclick="openModal('codesModal')">
+      <div class="icon">🔑</div>
+      Códigos
+    </button>
+    <button class="menu-item" onclick="openModal('rankingModal')">
+      <div class="icon">📊</div>
+      Ranking
+    </button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div id="gameScreen" class="screen">
+  <div class="hud">
+    <div class="timer" id="timerDisplay">00:00.00</div>
+    <div class="speed-label" id="speedLabel">Velocidade: 1x</div>
+  </div>
+  <canvas id="gameCanvas"></canvas>
+</div>
+
+<!-- RESULT -->
+<div id="resultScreen" class="screen">
+  <div class="result-title" id="resultTitle">Você perdeu!</div>
+  <div class="result-time" id="resultTime">00:12.45</div>
+  <div class="result-record" id="resultRecord">Recorde: 00:00.00</div>
+  <div class="new-record" id="newRecordBadge" style="display:none">🎉 NOVO RECORDE!</div>
+  <div style="display:flex; gap:12px; width:100%; margin-top:20px;">
+    <button class="btn btn-secondary" style="flex:1" onclick="goToMenu()">Menu</button>
+    <button class="btn btn-primary" style="flex:1" onclick="startGame()">Jogar de novo</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="recordsModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">🏆 Seus Recordes</div>
+    <div id="recordsList"></div>
+    <button class="close-btn" onclick="closeModal('recordsModal')">Fechar</button>
+  </div>
+</div>
+
+<div id="skinsModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">👕 Skins</div>
+    <div class="skin-card">
+      <div class="skin-preview" style="background:linear-gradient(180deg,#4fc3f7,#0288d1)"></div>
+      <div>
+        <div style="font-weight:800">Corredor Clássico</div>
+        <div style="font-size:13px;color:#aaa">Skin inicial</div>
+      </div>
+    </div>
+    <div class="skin-card locked">
+      <div class="skin-preview" style="background:#9c27b0"></div>
+      <div>
+        <div style="font-weight:800">Ninja Roxo</div>
+        <div style="font-size:13px;color:#aaa">Bloqueada</div>
+      </div>
+    </div>
+    <div class="skin-card locked">
+      <div class="skin-preview" style="background:#ff9800"></div>
+      <div>
+        <div style="font-weight:800">Fogo</div>
+        <div style="font-size:13px;color:#aaa">Bloqueada</div>
+      </div>
+    </div>
+    <button class="close-btn" onclick="closeModal('skinsModal')">Fechar</button>
+  </div>
+</div>
+
+<div id="codesModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">🔑 Códigos de Skin</div>
+    <p style="font-size:14px;color:#aaa;margin-bottom:10px">Digite um código para desbloquear skins.</p>
+    <div class="code-input">
+      <input type="text" id="codeInput" placeholder="Ex: GOLD2024" maxlength="12">
+      <button onclick="redeemCode()">OK</button>
+    </div>
+    <p id="codeMsg" style="margin-top:12px;font-size:14px;text-align:center"></p>
+    <button class="close-btn" onclick="closeModal('codesModal')">Fechar</button>
+  </div>
+</div>
+
+<div id="rankingModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">📊 Ranking</div>
+    <div class="rank-tabs">
+      <button class="rank-tab active" onclick="showRank('weekly')">Semanal</button>
+      <button class="rank-tab" onclick="showRank('global')">Global</button>
+    </div>
+    <div id="rankList"></div>
+    <button class="close-btn" onclick="closeModal('rankingModal')">Fechar</button>
+  </div>
+</div>
+
+<div id="settingsModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">⚙️ Configurações</div>
+    <div class="settings-row">
+      <span>Música</span>
+      <input type="range" id="musicVol" min="0" max="1" step="0.05" value="0.4" oninput="updateVolume()">
+    </div>
+    <div class="settings-row">
+      <span>Efeitos</span>
+      <input type="range" id="sfxVol" min="0" max="1" step="0.05" value="0.7" oninput="updateVolume()">
+    </div>
+    <div class="settings-row">
+      <span>Mutar tudo</span>
+      <div class="toggle" id="muteToggle" onclick="toggleMute()"></div>
+    </div>
+    <button class="close-btn" onclick="closeModal('settingsModal')">Fechar</button>
+  </div>
+</div>
+
+<script>
+// ===================== AUDIO =====================
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let musicVol = 0.4, sfxVol = 0.7, muted = false;
+
+function playTone(freq, dur, type='square', vol=1) {
+  if (muted) return;
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.type = type;
+  o.frequency.value = freq;
+  g.gain.setValueAtTime(sfxVol * vol * 0.15, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start(); o.stop(audioCtx.currentTime + dur);
+}
+function sfxClick() { playTone(600, 0.08, 'square', 0.8); }
+function sfxMove() { playTone(320, 0.07, 'triangle', 0.6); }
+function sfxJump() { playTone(480, 0.12, 'sine', 0.7); playTone(720, 0.1, 'sine', 0.4); }
+function sfxCoin() { playTone(200, 0.3, 'sawtooth', 0.9); playTone(120, 0.4, 'sawtooth', 0.6); }
+function sfxHit() { playTone(90, 0.4, 'sawtooth', 1); playTone(60, 0.5, 'square', 0.8); }
+function sfxRecord() { playTone(523,0.15); setTimeout(()=>playTone(659,0.15),120); setTimeout(()=>playTone(784,0.25),240); }
+
+// ===================== DATA =====================
+let user = JSON.parse(localStorage.getItem('eam_user') || 'null');
+let records = JSON.parse(localStorage.getItem('eam_records') || '[]');
+let bestTime = parseFloat(localStorage.getItem('eam_best') || '0');
+
+function saveUser() { localStorage.setItem('eam_user', JSON.stringify(user)); }
+function saveRecords() {
+  localStorage.setItem('eam_records', JSON.stringify(records.slice(0,20)));
+  localStorage.setItem('eam_best', bestTime);
+}
+
+// Fake rankings
+const fakeWeekly = [
+  {name:'ShadowX', time:87.32, country:'BR'},
+  {name:'NinjaBR', time:74.11, country:'BR'},
+  {name:'ProRunner', time:68.90, country:'US'},
+  {name:'MoedaKing', time:61.45, country:'PT'},
+  {name:'FastLane', time:55.20, country:'AR'},
+];
+const fakeGlobal = [
+  {name:'Legend99', time:142.08, country:'US'},
+  {name:'GodMode', time:128.55, country:'KR'},
+  {name:'ShadowX', time:112.30, country:'BR'},
+  {name:'Ultimate', time:98.77, country:'JP'},
+  {name:'SpeedDemon', time:91.40, country:'DE'},
+];
+
+// ===================== UI =====================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function openModal(id) { sfxClick(); document.getElementById(id).classList.add('active'); if(id==='recordsModal') renderRecords(); if(id==='rankingModal') showRank('weekly'); }
+function closeModal(id) { sfxClick(); document.getElementById(id).classList.remove('active'); }
+
+function doLogin() {
+  sfxClick();
+  const name = document.getElementById('loginName').value.trim() || 'Jogador';
+  const pass = document.getElementById('loginPass').value;
+  const country = document.getElementById('loginCountry').value;
+  if (!pass) { alert('Digite uma senha'); return; }
+  user = { name, country, pass };
+  saveUser();
+  document.getElementById('displayName').textContent = name;
+  showScreen('menuScreen');
+}
+
+function goToMenu() {
+  sfxClick();
+  showScreen('menuScreen');
+}
+
+function renderRecords() {
+  const list = document.getElementById('recordsList');
+  if (!records.length) {
+    list.innerHTML = '<p style="text-align:center;color:#aaa">Nenhum recorde ainda.</p>';
+    return;
+  }
+  list.innerHTML = records.map((r,i) => `
+    <div class="record-item">
+      <span>#${i+1} — ${formatTime(r.time)}</span>
+      <span style="color:#888">${r.date}</span>
+    </div>
+  `).join('');
+}
+
+function showRank(type) {
+  sfxClick();
+  document.querySelectorAll('.rank-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  const data = type === 'weekly' ? fakeWeekly : fakeGlobal;
+  let list = [...data];
+  if (bestTime > 0) {
+    list.push({name: user?.name || 'Você', time: bestTime, country: user?.country || 'BR', you:true});
+    list.sort((a,b) => b.time - a.time);
+  }
+  document.getElementById('rankList').innerHTML = list.slice(0,8).map((r,i) => `
+    <div class="rank-item" style="${r.you?'color:var(--gold)':''}">
+      <span>${i+1}. ${r.name} ${r.you?'(você)':''}</span>
+      <span>${formatTime(r.time)}</span>
+    </div>
+  `).join('');
+}
+
+function redeemCode() {
+  sfxClick();
+  const code = document.getElementById('codeInput').value.trim().toUpperCase();
+  const msg = document.getElementById('codeMsg');
+  if (code === 'GOLD2024' || code === 'NINJA' || code === 'FOGO') {
+    msg.style.color = '#00e676';
+    msg.textContent = 'Código válido! (skin ainda bloqueada neste protótipo)';
+  } else {
+    msg.style.color = '#ff3b5c';
+    msg.textContent = 'Código inválido';
+  }
+}
+
+function updateVolume() {
+  musicVol = parseFloat(document.getElementById('musicVol').value);
+  sfxVol = parseFloat(document.getElementById('sfxVol').value);
+}
+function toggleMute() {
+  muted = !muted;
+  document.getElementById('muteToggle').classList.toggle('on', muted);
+  sfxClick();
+}
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  const ms = Math.floor((sec % 1) * 100);
+  return `\( {String(m).padStart(2,'0')}: \){String(s).padStart(2,'0')}.${String(ms).padStart(2,'0')}`;
+}
+
+// ===================== GAME =====================
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, laneW;
+let player, obstacles, coins, particles;
+let gameRunning = false;
+let startTime, elapsed, speed, scoreTime;
+let lastSpawn, lastCoinSpawn;
+let animFrame;
+
+function resize() {
+  W = canvas.width = canvas.clientWidth * devicePixelRatio;
+  H = canvas.height = canvas.clientHeight * devicePixelRatio;
+  laneW = W / 3;
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+  W = canvas.clientWidth;
+  H = canvas.clientHeight;
+  laneW = W / 3;
+}
+
+function startGame() {
+  sfxClick();
+  showScreen('gameScreen');
+  resize();
+  player = {
+    lane: 1,
+    targetLane: 1,
+    x: laneW * 1.5,
+    y: H * 0.75,
+    jump: 0,
+    jumpVel: 0,
+    width: 40,
+    height: 60,
+    anim: 0,
+    dead: false,
+    deathType: null
+  };
+  obstacles = [];
+  coins = [];
+  particles = [];
+  speed = 4;
+  lastSpawn = 0;
+  lastCoinSpawn = 0;
+  startTime = performance.now();
+  elapsed = 0;
+  gameRunning = true;
+  document.getElementById('newRecordBadge').style.display = 'none';
+  requestAnimationFrame(loop);
+}
+
+function loop(now) {
+  if (!gameRunning) return;
+  elapsed = (now - startTime) / 1000;
+  document.getElementById('timerDisplay').textContent = formatTime(elapsed);
+  document.getElementById('speedLabel').textContent = `Velocidade: ${speed.toFixed(1)}x`;
+
+  // speed ramp
+  speed = 4 + Math.min(elapsed * 0.25, 12);
+
+  update(now);
+  draw();
+  animFrame = requestAnimationFrame(loop);
+}
+
+function update(now) {
+  // player move
+  const targetX = laneW * (player.targetLane + 0.5);
+  player.x += (targetX - player.x) * 0.25;
+  player.lane = player.targetLane;
+
+  // jump
+  if (player.jump > 0 || player.jumpVel !== 0) {
+    player.jumpVel -= 0.9;
+    player.jump += player.jumpVel;
+    if (player.jump <= 0) { player.jump = 0; player.jumpVel = 0; }
+  }
+  player.anim += 0.2;
+
+  // spawn trains
+  if (now - lastSpawn > Math.max(900 - speed * 40, 350)) {
+    lastSpawn = now;
+    const side = Math.random() < 0.5 ? 0 : 2;
+    obstacles.push({
+      lane: side,
+      y: -120,
+      height: 110 + Math.random()*40,
+      type: 'train'
+    });
+    // occasional middle train when fast
+    if (speed > 8 && Math.random() < 0.3) {
+      obstacles.push({ lane: 1, y: -200, height: 100, type: 'train' });
+    }
+  }
+
+  // spawn coins
+  const coinInterval = speed < 7 ? 1800 : 1100;
+  if (now - lastCoinSpawn > coinInterval) {
+    lastCoinSpawn = now;
+    if (speed < 7) {
+      // groups of 3 consecutive in one lane
+      const lane = Math.floor(Math.random() * 3);
+      for (let i = 0; i < 3; i++) {
+        coins.push({ lane, y: -40 - i * 55, r: 14, collected: false });
+      }
+    } else {
+      // 3 rows across
+      for (let row = 0; row < 3; row++) {
+        for (let l = 0; l < 3; l++) {
+          coins.push({ lane: l, y: -40 - row * 50, r: 13, collected: false });
+        }
+      }
+    }
+  }
+
+  // move obstacles & coins
+  for (let o of obstacles) o.y += speed * 1.8;
+  for (let c of coins) c.y += speed * 1.8;
+
+  // cleanup
+  obstacles = obstacles.filter(o => o.y < H + 150);
+  coins = coins.filter(c => c.y < H + 80 && !c.collected);
+
+  // collision
+  const px = player.x;
+  const py = player.y - player.jump;
+  const pw = player.width;
+  const ph = player.height;
+
+  for (let o of obstacles) {
+    const ox = laneW * (o.lane + 0.5);
+    if (Math.abs(px - ox) < 38 && py + ph > o.y && py < o.y + o.height) {
+      die('train');
+      return;
+    }
+  }
+  for (let c of coins) {
+    if (c.collected) continue;
+    const cx = laneW * (c.lane + 0.5);
+    const cy = c.y;
+    if (Math.abs(px - cx) < 30 && Math.abs(py + ph/2 - cy) < 30 && player.jump < 20) {
+      c.collected = true;
+      die('coin');
+      return;
+    }
+  }
+
+  // particles
+  particles = particles.filter(p => {
+    p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+    return p.life > 0;
+  });
+}
+
+function die(type) {
+  gameRunning = false;
+  player.dead = true;
+  player.deathType = type;
+  scoreTime = elapsed;
+  if (type === 'coin') sfxCoin(); else sfxHit();
+
+  // burst particles
+  for (let i = 0; i < 25; i++) {
+    particles.push({
+      x: player.x, y: player.y - player.jump,
+      vx: (Math.random()-0.5)*12,
+      vy: (Math.random()-0.5)*12,
+      life: 1,
+      color: type === 'coin' ? '#ffd700' : '#ff5252'
+    });
+  }
+
+  // save record
+  const isNew = scoreTime > bestTime;
+  if (isNew) {
+    bestTime = scoreTime;
+    sfxRecord();
+  }
+  records.unshift({
+    time: scoreTime,
+    date: new Date().toLocaleDateString('pt-BR')
+  });
+  saveRecords();
+
+  setTimeout(() => {
+    document.getElementById('resultTitle').textContent = type === 'coin' ? 'Você pegou uma moeda!' : 'Você bateu no trem!';
+    document.getElementById('resultTime').textContent = formatTime(scoreTime);
+    document.getElementById('resultRecord').textContent = `Recorde: ${formatTime(bestTime)}`;
+    document.getElementById('newRecordBadge').style.display = isNew ? 'block' : 'none';
+    showScreen('resultScreen');
+  }, 900);
+}
+
+function draw() {
+  // background
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(0, 0, W, H);
+
+  // rails / lanes
+  for (let i = 0; i < 3; i++) {
+    const x = i * laneW;
+    ctx.fillStyle = i % 2 === 0 ? '#22223a' : '#1e1e32';
+    ctx.fillRect(x, 0, laneW, H);
+    // rail lines
+    ctx.strokeStyle = '#3a3a55';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x + 8, 0); ctx.lineTo(x + 8, H);
+    ctx.moveTo(x + laneW - 8, 0); ctx.lineTo(x + laneW - 8, H);
+    ctx.stroke();
+  }
+
+  // moving lines (speed feeling)
+  ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+  ctx.lineWidth = 2;
+  const offset = (performance.now() / 10 * speed) % 60;
+  for (let y = -60 + offset; y < H; y += 60) {
+    ctx.beginPath();
+    ctx.moveTo(0, y); ctx.lineTo(W, y);
+    ctx.stroke();
+  }
+
+  // coins
+  for (let c of coins) {
+    if (c.collected) continue;
+    const cx = laneW * (c.lane + 0.5);
+    // glow
+    ctx.beginPath();
+    ctx.arc(cx, c.y, c.r + 6, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,215,0,0.25)';
+    ctx.fill();
+    // coin
+    ctx.beginPath();
+    ctx.arc(cx, c.y, c.r, 0, Math.PI*2);
+    ctx.fillStyle = '#ffd700';
+    ctx.fill();
+    ctx.fillStyle = '#ffaa00';
+    ctx.beginPath();
+    ctx.arc(cx, c.y, c.r * 0.55, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // trains
+  for (let o of obstacles) {
+    const ox = laneW * (o.lane + 0.5) - 36;
+    // body
+    const grad = ctx.createLinearGradient(ox, o.y, ox, o.y + o.height);
+    grad.addColorStop(0, '#e53935');
+    grad.addColorStop(1, '#b71c1c');
+    ctx.fillStyle = grad;
+    ctx.fillRect(ox, o.y, 72, o.height);
+    // windows
+    ctx.fillStyle = '#90caf9';
+    for (let wy = 15; wy < o.height - 20; wy += 28) {
+      ctx.fillRect(ox + 10, o.y + wy, 20, 16);
+      ctx.fillRect(ox + 42, o.y + wy, 20, 16);
+    }
+    // lights
+    ctx.fillStyle = '#ffeb3b';
+    ctx.fillRect(ox + 8, o.y + o.height - 12, 14, 8);
+    ctx.fillRect(ox + 50, o.y + o.height - 12, 14, 8);
+  }
+
+  // player
+  if (!player.dead || particles.length) {
+    const px = player.x;
+    const py = player.y - player.jump;
+    // shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(px, player.y + 10, 22, 8, 0, 0, Math.PI*2);
+    ctx.fill();
+
+    // body
+    ctx.fillStyle = '#4fc3f7';
+    ctx.beginPath();
+    ctx.roundRect(px - 18, py - 50, 36, 48, 10);
+    ctx.fill();
+    // head
+    ctx.fillStyle = '#ffcc80';
+    ctx.beginPath();
+    ctx.arc(px, py - 62, 18, 0, Math.PI*2);
+    ctx.fill();
+    // eyes
+    ctx.fillStyle = '#333';
+    ctx.beginPath();
+    ctx.arc(px - 6, py - 64, 3, 0, Math.PI*2);
+    ctx.arc(px + 6, py - 64, 3, 0, Math.PI*2);
+    ctx.fill();
+    // legs (run anim)
+    const legSwing = Math.sin(player.anim) * 12;
+    ctx.fillStyle = '#1565c0';
+    ctx.fillRect(px - 14, py - 8, 10, 22 + legSwing);
+    ctx.fillRect(px + 4, py - 8, 10, 22 - legSwing);
+  }
+
+  // death particles
+  for (let p of particles) {
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+// controls
+function changeLane(dir) {
+  if (!gameRunning || player.dead) return;
+  const next = Math.max(0, Math.min(2, player.targetLane + dir));
+  if (next !== player.targetLane) {
+    player.targetLane = next;
+    sfxMove();
+  }
+}
+function doJump() {
+  if (!gameRunning || player.dead || player.jump > 0) return;
+  player.jumpVel = 14;
+  player.jump = 1;
+  sfxJump();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') changeLane(-1);
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') changeLane(1);
+  if (e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w' || e.key === 'W') doJump();
+});
+
+// touch
+let touchStartX = 0, touchStartY = 0;
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, {passive:false});
+canvas.addEventListener('touchend', e => {
+  e.preventDefault();
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) {
+    changeLane(dx > 0 ? 1 : -1);
+  } else if (dy < -30) {
+    doJump();
+  }
+}, {passive:false});
+
+// mouse click for jump / side
+canvas.addEventListener('click', e => {
+  if (!gameRunning) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  if (x < W/3) changeLane(-1);
+  else if (x > W*2/3) changeLane(1);
+  else doJump();
+});
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('gameScreen').classList.contains('active')) resize();
+});
+
+// init
+if (user) {
+  document.getElementById('displayName').textContent = user.name;
+  showScreen('menuScreen');
+}
+</script>
+</body>
+</html>
